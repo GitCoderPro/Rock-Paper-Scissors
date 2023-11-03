@@ -1,40 +1,71 @@
-const randomChoice = Math.floor(Math.random() * 3)
+const rock = document.getElementById("rock");
+const paper = document.getElementById("paper");
+const scissors = document.getElementById("scissors");
+let playerScore = 0;
+let computerScore = 0;
 
-const getComputerChoice = () => {
-  if (randomChoice === 0) {
-    return "Rock".toLowerCase()
-  } else if (randomChoice === 1) {
-    return "Paper".toLowerCase()
-  } else {
-    return "Scissors".toLowerCase()
-  }
-}
+const generateComputerChoice = () => {
+  const choices = ['rock', 'paper', 'scissors'];
+  const randomIndex = Math.floor(Math.random() * choices.length);
+  return choices[randomIndex];
+};
 
 const playRound = (playerSelection, computerSelection) => {
   if (playerSelection === computerSelection) {
-    return "Tie"
-  } else if (playerSelection === "rock" && computerSelection === "paper") {
-    return "You lose! Paper beats rock."
-  } else if (playerSelection === "rock" && computerSelection === "scissors") {
-    return "You win! Rock beats scissors."
-  } else if (playerSelection === "scissors" && computerSelection === "rock") {
-    return "You lose! Rock beats scissors."
-  } else if (playerSelection === "scissors" && computerSelection === "paper") {
-    return "You win! Scissors beats Paper."
-  } else if (playerSelection === "paper" && computerSelection === "rock") {
-    return "You win! Paper beats rock."
-  } else if (playerSelection === "paper" && computerSelection === "scissors") {
-    return "You lose! Scissors beats Paper."
+    return `It's a tie! You both chose ${playerSelection}.`;
+  } else if (
+    (playerSelection === 'rock' && computerSelection === 'scissors') ||
+    (playerSelection === 'paper' && computerSelection === 'rock') ||
+    (playerSelection === 'scissors' && computerSelection === 'paper')
+  ) {
+    return `You win! ${playerSelection} beats ${computerSelection}.`;
   } else {
-    return "You need to type either rock, paper or scissors"
+    return `You lose! ${computerSelection} beats ${playerSelection}.`;
   }
-}
+};
 
-const mySelection = prompt("Pick rock, paper or scissors").toLowerCase()
-const computerSelection = getComputerChoice()
+const updateScores = () => {
+  document.getElementById("player-score").innerHTML = `Player: ${playerScore}`;
+  document.getElementById("computer-score").innerHTML = `Computer: ${computerScore}`;
 
-console.log(`The computer picked ${computerSelection}`)
-console.log(playRound(mySelection, computerSelection))
+  if (playerScore === 5) {
+    alert("Congratulations! You've won the game!");
+    resetGame();
+  } else if (computerScore === 5) {
+    alert("The computer has won the game!");
+    resetGame();
+  }
+};
 
-document.getElementById("computer").innerHTML = `The computer picked ${computerSelection}`
-document.getElementById("result").innerHTML = playRound(mySelection, computerSelection)
+const resetGame = () => {
+  playerScore = 0;
+  computerScore = 0;
+  updateScores();
+};
+
+const updateGame = (playerSelection) => {
+  const computerSelection = generateComputerChoice();
+  document.getElementById("computer").innerHTML = `The computer picked ${computerSelection}`;
+  const result = playRound(playerSelection, computerSelection);
+  document.getElementById("result").innerHTML = result;
+
+  if (result.startsWith("You win")) {
+    playerScore++;
+  } else if (result.startsWith("You lose")) {
+    computerScore++;
+  }
+
+  updateScores();
+};
+
+rock.addEventListener('click', () => {
+  updateGame('rock');
+});
+
+paper.addEventListener('click', () => {
+  updateGame('paper');
+});
+
+scissors.addEventListener('click', () => {
+  updateGame('scissors');
+});

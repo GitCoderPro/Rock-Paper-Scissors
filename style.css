@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: green;
+}
+
+p, div {
+  text-align: center;
+}
+
+#game {
+  border-bottom: 6px solid black;
+  background: lightblue;
+  padding-bottom: 10px;
+}
